@@ -4,10 +4,8 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.microblog.pojo.UserBaseInfo;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -72,7 +70,14 @@ public class Blog implements Serializable {
 	private LocalDateTime createTime;
 
 	/**
-	 * 0：正常，1：被用户删除，2：被举报，3：被用户隐藏
+	 * 更新时间
+	 */
+	@TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+	@Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_millis)
+	private LocalDateTime updateTime;
+
+	/**
+	 * 0：正常，1：被举报，2：被用户隐藏
 	 */
 	@TableField(value = "status", fill = FieldFill.INSERT)
 	@Field(type = FieldType.Byte)
@@ -116,6 +121,15 @@ public class Blog implements Serializable {
 	@TableField("retweet_id")
 	@Field(type = FieldType.Long)
 	private Long retweetId;
+
+
+	/**
+	 * 是否删除 1代表删除，0代表未删除
+	 */
+	@TableField("is_deleted")
+	@Field(type = FieldType.Boolean)
+	private boolean deleted;
+
 	/**
 	 * 是否点赞
 	 */
@@ -144,7 +158,7 @@ public class Blog implements Serializable {
 	 * 展示评论
 	 */
 	@TableField(exist = false)
-	private List<BlogComments> blogComments = null;
+	private List<BlogComment> blogComments = null;
 
 	@TableField(exist = false)
 	private static final long serialVersionUID = 1L;

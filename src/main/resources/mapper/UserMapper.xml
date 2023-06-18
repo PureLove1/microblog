@@ -10,7 +10,7 @@
             <result property="sex" column="sex" jdbcType="TINYINT"/>
             <result property="password" column="password" jdbcType="VARCHAR"/>
             <result property="email" column="email" jdbcType="VARCHAR"/>
-            <result property="lastModify" column="last_modify" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
             <result property="lastLogin" column="last_login" jdbcType="TIMESTAMP"/>
             <result property="status" column="status" jdbcType="TINYINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
@@ -26,7 +26,7 @@
 
     <sql id="Base_Column_List">
         id,name,sex,
-        password,email,last_modify,
+        password,email,update_time,
         last_login,status,create_time,
         like_num,image,introduce,
         phone,real_name,birth,

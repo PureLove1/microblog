@@ -1,10 +1,9 @@
 package com.microblog.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 /**
  * @author 贺畅
@@ -24,4 +23,16 @@ public class Channel {
 	 */
 	@TableField(value = "content")
 	private String content;
+
+	/**
+	 * 插入时间
+	 */
+	@TableField(value = "create_time",fill = FieldFill.INSERT)
+	private LocalDateTime createTime;
+
+	/**
+	 * 更新时间
+	 */
+	@TableField(value = "update_time",fill = FieldFill.INSERT_UPDATE)
+	private LocalDateTime updateTime;
 }

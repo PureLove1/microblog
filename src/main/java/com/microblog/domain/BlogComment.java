@@ -14,9 +14,9 @@ import lombok.Data;
  * @author 贺畅
  * @TableName blog_comments
  */
-@TableName(value ="blog_comments")
+@TableName(value ="blog_comment")
 @Data
-public class BlogComments implements Serializable {
+public class BlogComment implements Serializable {
     /**
      * 主键
      */
@@ -66,6 +66,12 @@ public class BlogComments implements Serializable {
     private LocalDateTime createTime;
 
     /**
+     * 更新时间
+     */
+    @TableField(value = "update_time",fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
+
+    /**
      * 回复的用户的名称
      */
     @TableField(value = "target")
@@ -76,6 +82,12 @@ public class BlogComments implements Serializable {
      */
     @TableField(value = "last_modify",fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime lastModify;
+
+    /**
+     * 是否删除 1代表删除，0代表未删除
+     */
+    @TableField(value = "is_deleted")
+    private boolean deleted;
 
     /**
      * 用户信息
@@ -93,7 +105,7 @@ public class BlogComments implements Serializable {
      * 子评论集合
      */
     @TableField(exist = false)
-    private List<BlogComments> children;
+    private List<BlogComment> children;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

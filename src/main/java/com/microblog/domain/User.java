@@ -50,10 +50,16 @@ public class User implements Serializable {
 	private String email;
 
 	/**
-	 * 最后一次修改
+	 * 插入时间
 	 */
-	@TableField(value = "last_modify",fill = FieldFill.INSERT_UPDATE)
-	private LocalDateTime lastModify;
+	@TableField(value = "create_time",fill = FieldFill.INSERT)
+	private LocalDateTime createTime;
+
+	/**
+	 * 更新时间
+	 */
+	@TableField(value = "update_time",fill = FieldFill.INSERT_UPDATE)
+	private LocalDateTime updateTime;
 
 	/**
 	 * 最后一次登录
@@ -66,12 +72,6 @@ public class User implements Serializable {
 	 */
 	@TableField(value = "status",fill = FieldFill.INSERT)
 	private Byte status;
-
-	/**
-	 * 用户创建时间
-	 */
-	@TableField(value = "create_time",fill = FieldFill.INSERT)
-	private LocalDateTime createTime;
 
 	/**
 	 * 被点赞数

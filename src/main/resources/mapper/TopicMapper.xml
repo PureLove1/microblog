@@ -7,14 +7,14 @@
     <resultMap id="BaseResultMap" type="com.microblog.domain.Topic">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="content" column="content" jdbcType="VARCHAR"/>
-        <result property="lastModify" column="last_modify" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="degree" column="degree" jdbcType="INTEGER"/>
         <result property="ownerId" column="owner_id" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,content,last_modify,
+        id,content,update_time,
         create_time,degree,owner_id
     </sql>
 

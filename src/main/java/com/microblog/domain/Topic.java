@@ -28,16 +28,16 @@ public class Topic implements Serializable {
 	private String content;
 
 	/**
-	 * 最后一次修改
+	 * 插入时间
 	 */
-	@TableField(value = "last_modify", fill = FieldFill.INSERT_UPDATE)
-	private LocalDateTime lastModify;
+	@TableField(value = "create_time",fill = FieldFill.INSERT)
+	private LocalDateTime createTime;
 
 	/**
-	 * 创建时间
+	 * 更新时间
 	 */
-	@TableField(value = "create_time", fill = FieldFill.INSERT)
-	private LocalDateTime createTime;
+	@TableField(value = "update_time",fill = FieldFill.INSERT_UPDATE)
+	private LocalDateTime updateTime;
 
 	/**
 	 *

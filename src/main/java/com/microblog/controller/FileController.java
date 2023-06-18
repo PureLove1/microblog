@@ -25,7 +25,8 @@ import static com.microblog.constant.StatusCode.*;
 // 端口不同 也是跨域  loalhost:18081----->localhost:18082
 // 协议不同 也是跨域  http://www.jd.com  --->  https://www.jd.com
 // 域名不同 也是跨域  http://www.jd.com  ---> http://www.taobao.com
-// 协议一直,端口一致,域名一致就不是跨域  http://www.jd.com:80 --->http://www.jd.com:80 不是跨域
+// 协议一直,端口一致,域名一致就不是跨域
+// http://www.jd.com:80 --->http://www.jd.com:80 不是跨域
 @Slf4j
 @RequestMapping("/file")
 public class FileController {

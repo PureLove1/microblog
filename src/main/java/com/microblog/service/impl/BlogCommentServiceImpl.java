@@ -5,10 +5,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.microblog.common.Result;
 import com.microblog.common.UserHolder;
 import com.microblog.dao.elasticsearch.BlogRepository;
+import com.microblog.dao.mapper.BlogCommentMapper;
 import com.microblog.domain.Blog;
-import com.microblog.domain.BlogComments;
-import com.microblog.service.BlogCommentsService;
-import com.microblog.dao.mapper.BlogCommentsMapper;
+import com.microblog.domain.BlogComment;
+import com.microblog.service.BlogCommentService;
 import com.microblog.service.BlogService;
 import com.microblog.util.RedisIdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +24,10 @@ import static com.microblog.constant.RedisKeyPrefix.BLOG_COMMENT_ID;
  * @date 2022/12/18
  */
 @Service
-public class BlogCommentsServiceImpl extends ServiceImpl<BlogCommentsMapper, BlogComments>
-		implements BlogCommentsService {
+public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogComment>
+		implements BlogCommentService {
 	@Autowired
-	private BlogCommentsMapper blogCommentsMapper;
+	private BlogCommentMapper blogCommentMapper;
 
 	@Autowired
 	private BlogService blogService;
@@ -39,14 +39,14 @@ public class BlogCommentsServiceImpl extends ServiceImpl<BlogCommentsMapper, Blo
 	private RedisIdWorker redisIdWorker;
 
 	@Override
-	public List<BlogComments> queryBlogComments(Long blogId, Integer way) {
-		List<BlogComments> blogComments = blogCommentsMapper.queryCommentsAndUser(blogId, way);
+	public List<BlogComment> queryBlogComments(Long blogId, Integer way) {
+		List<BlogComment> blogComments = blogCommentMapper.queryCommentsAndUser(blogId, way);
 		return blogComments;
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Result addComment(BlogComments blogComments) {
+	public Result addComment(BlogComment blogComments) {
 		//使用redis生成的自增Id
 		long blogCommentId = redisIdWorker.nextId(BLOG_COMMENT_ID);
 		//获取并设置发布此评论的用户的id

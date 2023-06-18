@@ -5,7 +5,7 @@ import com.microblog.annotation.HasAnyRole;
 import com.microblog.common.UserHolder;
 import com.microblog.common.Result;
 import com.microblog.domain.Blog;
-import com.microblog.domain.BlogComments;
+import com.microblog.domain.BlogComment;
 import com.microblog.domain.Follow;
 import com.microblog.domain.User;
 import com.microblog.pojo.BlogAndTopic;
@@ -48,7 +48,7 @@ public class BlogController {
 	private BlogService blogService;
 
 	@Autowired
-	private BlogCommentsService blogCommentsService;
+	private BlogCommentService blogCommentService;
 
 	@Autowired
 	private RedisIdWorker redisIdWorker;
@@ -453,7 +453,7 @@ public class BlogController {
 				.eq(Follow::getUserId, currentUser.getId()));
 		user.setFollowed(count > 0);
 		blog.setUser(user);
-		List<BlogComments> blogComments = blogCommentsService.queryBlogComments(blog.getId(), 0);
+		List<BlogComment> blogComments = blogCommentService.queryBlogComments(blog.getId(), 0);
 		blog.setBlogComments(blogComments);
 		return Result.ok(blog);
 	}
@@ -506,7 +506,7 @@ public class BlogController {
 			user.setFollowed(count > 0);
 			blog.setUser(user);
 		}
-		List<BlogComments> blogComments = blogCommentsService.queryBlogComments(id, way);
+		List<BlogComment> blogComments = blogCommentService.queryBlogComments(id, way);
 		blog.setBlogComments(blogComments);
 		return Result.ok(blog);
 	}

@@ -31,7 +31,7 @@ public class UserInfoUtil {
         user.setEmail(email);
         user.setBirth(birth);
         user.setCreateTime(now);
-        user.setLastModify(now);
+        user.setUpdateTime(now);
         user.setName("用户" + userId);
         return user;
     }

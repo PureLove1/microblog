@@ -1,9 +1,7 @@
 package com.microblog.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -42,16 +40,22 @@ public class Message implements Serializable {
     private String content;
 
     /**
-     * 发送时间
-     */
-    @TableField(value = "create_time")
-    private LocalDateTime createTime;
-
-    /**
      * 状态：0：已读 1：未读
      */
     @TableField(value="status")
     private Byte status;
+
+    /**
+     * 插入时间
+     */
+    @TableField(value = "create_time",fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+
+    /**
+     * 更新时间
+     */
+    @TableField(value = "update_time",fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

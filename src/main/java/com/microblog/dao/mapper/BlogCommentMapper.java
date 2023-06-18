@@ -1,6 +1,6 @@
 package com.microblog.dao.mapper;
 
-import com.microblog.domain.BlogComments;
+import com.microblog.domain.BlogComment;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 
@@ -11,8 +11,8 @@ import java.util.List;
  * @Entity com.microblog.domain.BlogComments
  */
 @Repository
-public interface BlogCommentsMapper extends BaseMapper<BlogComments> {
-	List<BlogComments> queryCommentsAndUser(Long blogId,Integer way);
+public interface BlogCommentMapper extends BaseMapper<BlogComment> {
+	List<BlogComment> queryCommentsAndUser(Long blogId,Integer way);
 }
 
 

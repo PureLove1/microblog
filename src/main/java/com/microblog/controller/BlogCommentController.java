@@ -4,12 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.microblog.annotation.HasAnyRole;
 import com.microblog.common.Result;
 import com.microblog.common.UserHolder;
-import com.microblog.domain.Blog;
-import com.microblog.domain.BlogComments;
+import com.microblog.domain.BlogComment;
 import com.microblog.domain.User;
-import com.microblog.service.BlogCommentsService;
-import com.microblog.service.BlogService;
-import com.microblog.util.RedisIdWorker;
+import com.microblog.service.BlogCommentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +26,13 @@ import static com.microblog.constant.UserRole.*;
  * @author 贺畅
  * @date 2022/11/28
  */
-@RequestMapping("/blogComments")
+@RequestMapping("/blogComment")
 @RestController
-public class BlogCommentsController {
-	private final Logger logger = LoggerFactory.getLogger(BlogCommentsController.class);
+public class BlogCommentController {
+	private final Logger logger = LoggerFactory.getLogger(BlogCommentController.class);
 
 	@Autowired
-	private BlogCommentsService blogCommentsService;
+	private BlogCommentService blogCommentService;
 
 
 	@Autowired
@@ -50,7 +47,7 @@ public class BlogCommentsController {
 	@GetMapping("/{blogId}")
     @HasAnyRole({ROLE_TOURIST,ROLE_USER})
 	public Result getBlogComments(@PathVariable Long blogId,@Nullable Integer way) {
-		List<BlogComments> blogCommentsList = blogCommentsService.queryBlogComments(blogId,way);
+		List<BlogComment> blogCommentsList = blogCommentService.queryBlogComments(blogId,way);
 		User currentUser = UserHolder.getCurrentUser();
 		if (currentUser != null) {
 			Long id = currentUser.getId();
@@ -64,13 +61,13 @@ public class BlogCommentsController {
 	/**
 	 * 添加评论
 	 *
-	 * @param blogComments 评论
+	 * @param blogComment 评论
 	 * @return 添加结果
 	 */
 	@HasAnyRole({ROLE_USER, ROLE_VIP, ROLE_ADMIN})
 	@PostMapping
-	public Result addComment(@RequestBody BlogComments blogComments) {
-		return blogCommentsService.addComment(blogComments);
+	public Result addComment(@RequestBody BlogComment blogComment) {
+		return blogCommentService.addComment(blogComment);
 	}
 
 	@HasAnyRole({ROLE_USER})
@@ -78,12 +75,12 @@ public class BlogCommentsController {
 	public Result likeBlogComment(@PathVariable Long blogCommentsId, @PathVariable boolean liked) {
 		Long id = UserHolder.getCurrentUser().getId();
 		String key = BLOG_COMMENT_LIKE + ":" + blogCommentsId;
-        UpdateWrapper<BlogComments> updateWrapper = new UpdateWrapper<BlogComments>().eq("id", blogCommentsId);
+        UpdateWrapper<BlogComment> updateWrapper = new UpdateWrapper<BlogComment>().eq("id", blogCommentsId);
         if (liked) {
 			Long add = redisTemplate.opsForSet().add(key, id);
 			if (add > 0) {
                 updateWrapper.setSql("like_num = like_num + 1");
-                if (blogCommentsService.update(updateWrapper)) {
+                if (blogCommentService.update(updateWrapper)) {
                     return Result.ok();
                 }
 			}
@@ -92,7 +89,7 @@ public class BlogCommentsController {
 			Long remove = redisTemplate.opsForSet().remove(key, id);
 			if (remove > 0) {
                 updateWrapper.setSql("like_num = like_num - 1");
-                if (blogCommentsService.update(updateWrapper)) {
+                if (blogCommentService.update(updateWrapper)) {
                     return Result.ok();
                 }
 			}
@@ -107,15 +104,15 @@ public class BlogCommentsController {
 	 * @param id               用户id
 	 * @return
 	 */
-	private List<BlogComments> setLiked(List<BlogComments> blogCommentsList, Long id) {
-		for (BlogComments blogComments : blogCommentsList) {
+	private List<BlogComment> setLiked(List<BlogComment> blogCommentsList, Long id) {
+		for (BlogComment blogComment : blogCommentsList) {
 			StringBuilder key = new StringBuilder(BLOG_COMMENT_LIKE);
-			key.append(":" + blogComments.getId());
+			key.append(":" + blogComment.getId());
 			String keyStr = key.toString();
 			Boolean liked = redisTemplate.opsForSet().isMember(keyStr, id);
-			blogComments.setLiked(liked);
-			if (blogComments.getChildren() != null) {
-				List<BlogComments> children = blogComments.getChildren();
+			blogComment.setLiked(liked);
+			if (blogComment.getChildren() != null) {
+				List<BlogComment> children = blogComment.getChildren();
 				setLiked(children, id);
 			}
 		}
