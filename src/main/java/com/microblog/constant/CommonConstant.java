@@ -3,6 +3,7 @@ package com.microblog.constant;
 /**
  * @author 贺畅
  * @date 2022/12/16
+ * 通用常量
  */
 public class CommonConstant {
 

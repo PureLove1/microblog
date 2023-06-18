@@ -3,6 +3,7 @@ package com.microblog.constant;
 /**
  * @author 贺畅
  * @date 2022/12/20
+ * 用户角色
  */
 public class UserRole {
 	/**
