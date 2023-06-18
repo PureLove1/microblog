@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.microblog.dao.mapper.BlogMapper">
+    <resultMap id="BaseResultMap" type="com.microblog.domain.Blog">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="urls" column="urls" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="channelId" column="channel_id" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="likeNum" column="like_num" jdbcType="INTEGER"/>
+        <result property="commentsNum" column="comments_num" jdbcType="INTEGER"/>
+        <result property="shareNum" column="share_num" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,content,
+        urls,type,
+        channel_id,create_time,status,
+        title,like_num,comments_num,
+        share_num
+    </sql>
+
+    <resultMap id="blogResultMap" type="com.microblog.domain.Blog">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="commentsNum" column="comments_num"/>
+        <result property="content" column="content"/>
+        <result property="urls" column="urls"/>
+        <result property="createTime" column="create_time"/>
+        <result property="likeNum" column="like_num"/>
+        <result property="title" column="title"/>
+        <result property="type" column="type"/>
+        <result property="status" column="status"/>
+        <result property="shareNum" column="share_num"/>
+        <association property="user" javaType="com.microblog.domain.User">
+            <result property="name" column="name"/>
+            <result property="image" column="image"/>
+        </association>
+        <association property="topic" javaType="com.microblog.domain.Topic">
+            <result property="content" column="topic"/>
+        </association>
+    </resultMap>
+    <resultMap id="blogAndUserResultMap" type="com.microblog.domain.Blog">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="commentsNum" column="comments_num"/>
+        <result property="content" column="content"/>
+        <result property="urls" column="urls"/>
+        <result property="createTime" column="create_time"/>
+        <result property="likeNum" column="like_num"/>
+        <result property="type" column="type"/>
+        <result property="status" column="status"/>
+        <result property="shareNum" column="share_num"/>
+        <association property="user" javaType="com.microblog.domain.User">
+            <result property="name" column="name"/>
+            <result property="image" column="image"/>
+        </association>
+    </resultMap>
+
+    <select id="selectAllBlog" resultMap="blogResultMap">
+        select b.id,
+        b.user_id,
+        b.comments_num,
+        b.content,
+        b.urls,
+        b.create_time,
+        b.like_num,
+        b.type,
+        b.`status`,
+        b.share_num,
+        u.image,
+        u.`name`
+        from blog b
+        LEFT JOIN user u on b.user_id=u.id
+        where b.`status`=0
+        <if test="userId != null">
+            and b.user_id = #{userId}
+        </if>
+        order by create_time desc
+    </select>
+
+    <select id="selectAllBlogByMyself" parameterType="java.lang.Long" resultMap="blogResultMap">
+         SELECT b.id,
+                b.user_id,
+                b.comments_num,
+                b.content,
+                b.urls,
+                b.create_time,
+                b.like_num,
+                b.type,
+                b.`status`,
+                b.share_num,
+                u.image,
+                u.`name`
+            FROM
+                blog b
+            LEFT JOIN `user` u ON b.user_id = u.id
+            WHERE
+                b.`status` IN (0, 1)
+            AND b.user_id = 1
+            ORDER BY
+        create_time DESC
+    </select>
+
+    <select id="listFollowUserBlog" resultMap="blogResultMap" parameterType="java.lang.Long">
+                SELECT
+            b.id,
+            b.user_id,
+            b.comments_num,
+            b.content,
+            b.urls,
+            b.create_time,
+            b.like_num,
+            b.type,
+            b.`status`,
+            b.share_num,
+            u.image,
+            u.`name`
+        FROM
+            blog b
+        LEFT JOIN `user` u ON b.user_id = u.id
+        WHERE
+            b.`status` = 0
+        AND b.`user_id` IN (
+            SELECT
+                `follow_user_id`
+            FROM
+                `follow`
+            WHERE
+                `follow`.user_id = #{userId}
+        )
+        ORDER BY
+            create_time DESC
+    </select>
+    <select id="selectUserBlogById" resultMap="blogResultMap">
+        SELECT
+            b.id,
+            b.user_id,
+            b.comments_num,
+            b.content,
+            b.urls,
+            b.create_time,
+            b.like_num,
+            b.type,
+            b.`status`,
+            b.share_num,
+            u.image,
+            u.`name`
+        FROM
+            blog b
+        LEFT JOIN `user` u ON b.user_id = u.id
+        WHERE
+            b.`status` = 0
+        AND b.`user_id` = #{id}
+        ORDER BY
+            b.create_time DESC
+    </select>
+
+    <select id="getBlogAndUserByBlogId" resultMap="blogAndUserResultMap">
+         SELECT
+            b.id,
+            b.user_id,
+            b.comments_num,
+            b.content,
+            b.urls,
+            b.create_time,
+            b.like_num,
+            b.type,
+            b.`status`,
+            b.share_num,
+            u.image,
+            u.`name`
+        FROM
+            blog b
+        LEFT JOIN `user` u ON b.user_id = u.id
+        WHERE
+            b.`status` = 0
+        AND b.`id` = #{id}
+        ORDER BY
+            b.create_time DESC
+    </select>
+<!--    <select id="selectBlogByType" resultMap="blogResultMap">-->
+<!--        select b.id,-->
+<!--        b.user_id,-->
+<!--        b.comments_num,-->
+<!--        b.content,-->
+<!--        b.urls,-->
+<!--        b.create_time,-->
+<!--        b.like_num,-->
+<!--        b.type,-->
+<!--        b.title,-->
+<!--        b.`status`,-->
+<!--        b.share_num,-->
+<!--        u.image,-->
+<!--        u.`name`-->
+<!--        from blog b-->
+<!--        LEFT JOIN user u on b.user_id=u.id-->
+<!--        where b.`status`=0 and b.type=#{type}-->
+<!--        order by create_time desc-->
+<!--    </select>-->
+    <select id="selectBlogByTypeAndFollow" resultMap="blogResultMap">
+select b.id,
+        b.user_id,
+        b.comments_num,
+        b.content,
+        b.urls,
+        b.create_time,
+        b.like_num,
+        b.type,
+        b.title,
+        b.`status`,
+        b.share_num,
+        u.image,
+        u.`name`
+        from blog b
+        LEFT JOIN user u on b.user_id=u.id
+        where b.`status`=0
+         <if test="type!=null">
+             and b.type=#{type}
+         </if>
+        <if test="id!=null">
+            and b.user_id IN (
+            SELECT
+            follow_user_id
+            FROM
+            follow
+            WHERE
+            user_id = #{id}
+            )
+        </if>
+        order by create_time desc
+    </select>
+    <select id="listHotBlog" resultMap="blogResultMap">
+        select b.id,
+        b.user_id,
+        b.comments_num,
+        b.content,
+        b.urls,
+        b.create_time,
+        b.like_num,
+        b.type,
+        b.title,
+        b.`status`,
+        b.share_num,
+        u.image,
+        u.`name`
+        from blog b
+        LEFT JOIN user u on b.user_id=u.id
+        where b.`status`=0
+        <if test="currentPage!=null &amp; pageSize!=null">
+           limit #{currentPage},#{pageSize}
+        </if>
+        order by b.degree desc,b.create_time desc
+    </select>
+
+
+</mapper>

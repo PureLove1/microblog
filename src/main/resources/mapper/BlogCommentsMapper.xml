@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.microblog.dao.mapper.BlogCommentsMapper">
+    <resultMap id="BaseResultMap" type="com.microblog.domain.BlogComments">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="likeNum" column="like_num" jdbcType="INTEGER"/>
+        <result property="blogId" column="blog_id" jdbcType="BIGINT"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="target" column="target" jdbcType="VARCHAR"/>
+        <result property="lastModify" column="last_modify" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="blogCommentsMap" type="com.microblog.domain.BlogComments">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="content" column="content"/>
+        <result property="likeNum" column="like_num"/>
+        <result property="blogId" column="blog_id"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="target" column="target"/>
+        <result property="lastModify" column="lastModify"/>
+        <association property="user" javaType="com.microblog.domain.User">
+            <result property="name" column="name"/>
+            <result property="image" column="image"/>
+        </association>
+
+        <collection property="children"
+                    javaType="java.util.List"
+                    ofType="com.microblog.domain.BlogComments"
+                    column="{blogId=blog_id,id=id}"
+                    select="selectChildrenCommentsByParentId">
+        </collection>
+    </resultMap>
+
+    <resultMap id="blogChildrenCommentsMap" type="com.microblog.domain.BlogComments">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="content" column="content"/>
+        <result property="likeNum" column="like_num"/>
+        <result property="blogId" column="blog_id"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="target" column="target"/>
+        <result property="lastModify" column="lastModify"/>
+        <association property="user" javaType="com.microblog.domain.User">
+            <result property="name" column="name"/>
+            <result property="image" column="image"/>
+        </association>
+    </resultMap>
+
+    <select id="queryCommentsAndUser" resultMap="blogCommentsMap">
+        SELECT
+            bc.*, u.`name`,
+            u.image
+        FROM
+            blog_comments AS bc
+        LEFT JOIN `user` AS u ON u.id = bc.user_id
+        WHERE
+            bc.`blog_id` = #{blogId} and bc.`parent_id`=0
+        <choose>
+            <when test="way==2">
+                order by create_time desc
+            </when>
+            <when test="way==1">
+                order by create_time asc
+            </when>
+            <otherwise>
+                order by like_num desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectChildrenCommentsByParentId" resultMap="blogChildrenCommentsMap">
+        select bc.*, u.`name`
+        from blog_comments AS bc LEFT JOIN `user` AS u
+        on u.id = bc.user_id where blog_id = #{blogId} and parent_id = #{id} order by create_time asc
+    </select>
+
+    <sql id="Base_Column_List">
+        id,user_id,parent_id,
+        content,like_num,blog_id,
+        status,create_time,target,
+        last_modify
+    </sql>
+</mapper>

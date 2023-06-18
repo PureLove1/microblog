@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.microblog.dao.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.microblog.domain.User">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="sex" column="sex" jdbcType="TINYINT"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="lastModify" column="last_modify" jdbcType="TIMESTAMP"/>
+            <result property="lastLogin" column="last_login" jdbcType="TIMESTAMP"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="likeNum" column="like_num" jdbcType="INTEGER"/>
+            <result property="image" column="image" jdbcType="VARCHAR"/>
+            <result property="introduce" column="introduce" jdbcType="VARCHAR"/>
+            <result property="phone" column="phone" jdbcType="VARCHAR"/>
+            <result property="realName" column="real_name" jdbcType="VARCHAR"/>
+            <result property="birth" column="birth" jdbcType="DATE"/>
+            <result property="role" column="role" jdbcType="TINYINT"/>
+            <result property="salt" column="salt" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,sex,
+        password,email,last_modify,
+        last_login,status,create_time,
+        like_num,image,introduce,
+        phone,real_name,birth,
+        role,salt
+    </sql>
+    <select id="listUserInfo" parameterType="java.lang.Long" resultType="com.microblog.pojo.UserVO">
+        select `id`,`name`,`follow_num`,`fan_num`,`image`,`introduce`
+        from `user`
+        where id = #{id}
+    </select>
+    <select id="getUserByName" parameterType="java.lang.String" resultType="com.microblog.pojo.UserHeaderVO">
+        select `id`,`name`,`image`,`introduce`
+        from `user`
+        where name like concat(#{name},'%')
+        limit 0,3
+    </select>
+    <select id="getUserAndFanByName" resultType="com.microblog.pojo.UserHeaderAndFanNum">
+        select `id`,`name`,`image`,`introduce`,`fan_num`
+        from `user`
+        where name like concat(#{name},'%')
+        <choose>
+            <when test="currentPage!=null&amp;pageSize!=null">
+                limit #{currentPage},#{pageSize}
+            </when>
+            <otherwise>
+                limit 0,1
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getUserBaseInfoById" resultType="com.microblog.pojo.UserBaseInfo">
+        select `id`,`name`,`image`
+        from `user`
+        where `id` = #{id}
+    </select>
+
+    <select id="queryUser" resultType="com.microblog.pojo.UserHeaderAndFanNum">
+           select `id`,`name`,`image`,`introduce`,`fan_num`
+        from `user`
+        where name like concat(#{query},'%')
+        or introduce like concat('%',#{query},'%')
+        limit #{currentPage},#{pageSize}
+    </select>
+    <select id="queryUserByIntroduce" resultType="com.microblog.pojo.UserHeaderAndFanNum">
+           select `id`,`name`,`image`,`introduce`,`fan_num`
+        from `user`
+        where introduce like concat('%',#{introduce},'%')
+        limit #{currentPage},#{pageSize}
+    </select>
+
+</mapper>

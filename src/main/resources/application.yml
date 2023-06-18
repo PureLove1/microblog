@@ -1,0 +1,57 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /microblog
+spring:
+  servlet:
+    multipart: #设置文件上传大小限制
+      max-file-size: 500MB
+      max-request-size: 1024MB
+  mail:
+    # 邮箱域名
+    host: smtp.qq.com
+    # 端口（几乎所有邮箱默认的端口都是 465）
+    port: 465
+    # 邮箱的账号（自己定义也可以）密码(QQ邮箱的密码要改为QQ邮箱的授权码)
+    username: ${email.username}
+    password: ${email.password}   #授权码，不是密码
+    # 协议 (后面加个s表示它使用的是加密的smtp协议)
+    protocol: smtps
+    # 其他配置 Map数据类型  采用ssl安全连接的方式
+    properties: {mail.smtp.ssl.enable: true}
+  data:
+    elasticsearch:
+      cluster-nodes: localhost:9300
+      cluster-name: microblog
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/microblog?useSSL=false&characterEncoding=utf8
+    password: ${mysql.password}
+    username: ${mysql.username}
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 3 #核心数*2+磁盘数
+      max-active: 5
+      max-wait: 9000
+      min-idle: 2
+  rabbitmq:
+    host: ${cloud.rabbitmq.hostname} #主机名
+    port: 5672 #端口
+    virtual-host: / #虚拟主机名
+    username: ${cloud.rabbitmq.username} #用户名
+    password: ${cloud.rabbitmq.password} #密码
+    listener:
+      simple:
+        preFetch: 1 #每次只能获取一条消息，处理完成才能获取下一个消息
+  redis:
+    password: ${cloud.redis.password}
+    host: ${cloud.redis.host}
+    port: 6379
+    database: 0
+    timeout: 6000ms
+#mybatis日志配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #日志输出路径：控制台
+  mapper-locations: classpath:mapper/*.xml #xml mapper路径
+  type-aliases-package: com.microblog.domain #别名包扫描
