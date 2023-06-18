@@ -140,7 +140,7 @@ public class BlogController {
 		String content = blog.getContent();
 		//判断博客格式
 		String urls = blog.getUrls();
-		if (StringUtils.isEmpty(urls)) {
+		if (StringUtil.isNotBlank(urls)) {
 			blog.setType("纯文本");
 		} else {
 			blog.setType("图片");
@@ -276,7 +276,6 @@ public class BlogController {
 				//遍历博文
 				Blog blog = blogs.get(i);
 				Long blogId = blog.getId();
-
 				//判断博文是否被点赞
 				String key = BLOG_LIKE + ":" + blogId;
 				Boolean isLiked = redisTemplate.opsForSet().isMember(key, currentUser.getId());

@@ -87,7 +87,7 @@ public class BlogComment implements Serializable {
      * 是否删除 1代表删除，0代表未删除
      */
     @TableField(value = "is_deleted")
-    private boolean deleted;
+    private Boolean deleted;
 
     /**
      * 用户信息
@@ -99,7 +99,7 @@ public class BlogComment implements Serializable {
      * 点赞信息
      */
     @TableField(exist = false)
-    private boolean liked;
+    private Boolean liked;
 
     /**
      * 子评论集合

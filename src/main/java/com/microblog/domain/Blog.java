@@ -128,13 +128,13 @@ public class Blog implements Serializable {
 	 */
 	@TableField("is_deleted")
 	@Field(type = FieldType.Boolean)
-	private boolean deleted;
+	private Boolean deleted;
 
 	/**
 	 * 是否点赞
 	 */
 	@TableField(exist = false)
-	private boolean liked;
+	private Boolean liked;
 
 	/**
 	 * 关联用户
@@ -152,7 +152,7 @@ public class Blog implements Serializable {
 	 * 展示评论
 	 */
 	@TableField(exist = false)
-	private boolean showComment = false;
+	private Boolean showComment = false;
 
 	/**
 	 * 展示评论
