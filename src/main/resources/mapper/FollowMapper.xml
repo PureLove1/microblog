@@ -5,14 +5,15 @@
 <mapper namespace="com.microblog.dao.mapper.FollowMapper">
 
     <resultMap id="BaseResultMap" type="com.microblog.domain.Follow">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="userId" column="user_id" jdbcType="BIGINT"/>
-            <result property="followUserId" column="follow_user_id" jdbcType="BIGINT"/>
-            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="followUserId" column="follow_user_id" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,user_id,follow_user_id,
+        id,user_id,follow_user_id,update_time,
         create_time
     </sql>
 </mapper>
