@@ -9,7 +9,6 @@ import com.microblog.domain.User;
  * @author 贺畅
  * @date 2022/11/28
  */
-
 public class UserHolder {
     /**
      * ThreadLocal存储当前线程用户信息
