@@ -29,7 +29,7 @@ public class ChannelController {
 
 	/**
 	 * mysql获取全部频道
-	 * @return
+	 * @return 全部频道
 	 */
 	@GetMapping
 	public Result getAllChannels(){
