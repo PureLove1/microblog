@@ -76,5 +76,10 @@ public class RedisKeyPrefix {
      */
     public static final String WEEK_HOT_SEARCH="WEEK_HOT_SEARCH";
 
+    /**
+     * 频道数据缓存
+     */
+    public static final String CHANNEL_LIST = "CHANNEL_LIST";
+
 
 }

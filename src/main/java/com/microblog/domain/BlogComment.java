@@ -78,12 +78,6 @@ public class BlogComment implements Serializable {
     private String target;
 
     /**
-     * 修改时间
-     */
-    @TableField(value = "last_modify",fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime lastModify;
-
-    /**
      * 是否删除 1代表删除，0代表未删除
      */
     @TableField(value = "is_deleted")

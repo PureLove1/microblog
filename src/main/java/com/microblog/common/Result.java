@@ -1,6 +1,5 @@
 package com.microblog.common;
 
-import com.microblog.constant.StatusCode;
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 import lombok.AllArgsConstructor;
